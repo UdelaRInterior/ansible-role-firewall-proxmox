@@ -1,0 +1,12 @@
+---
+# defaults file for pve-firewall
+
+## Our Proxmox Virtual Enviroment node
+api_host: my_node.my_cluster.org
+
+## Route to the lxc container correspondent .fw file. Relative to ansible project 'files' folder.
+project_lxc_firewall_file: "firewall_proxmox/{{ inventory_hostname }}/{{ inventory_hostname.split('.')[0] }}.fw"
+
+## Route to the lxc container correspondent .fw file. Absolute to the file on our local machine that runs the playbook.
+local_path_to_lxc_firewall_file: "{{ playbook_dir }}/files/{{ project_lxc_firewall_file }}"
+

@@ -1,0 +1,17 @@
+[OPTIONS]
+
+policy_in: ACCEPT
+enable: 1
+
+[group webserver]
+IN HTTP(ACCEPT)
+IN HTTPS(ACCEPT)
+
+[group basic]
+IN SSH(ACCEPT)
+OUT SSH(ACCEPT)
+IN Ping(ACCEPT)
+OUT Ping(ACCEPT)
+OUT DNS(ACCEPT)
+OUT HTTP(ACCEPT)	# Necesario para instalación y actualización de paquetes. Needed for install and upgrade packages.
+OUT HTTPS(ACCEPT)	# Necesario para instalación y actualización de paquetes. Needed for install and upgrade packages.

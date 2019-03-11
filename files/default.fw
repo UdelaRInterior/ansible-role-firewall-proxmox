@@ -1,0 +1,12 @@
+[OPTIONS]
+
+enable: 1
+policy_in: DROP
+
+[RULES]
+
+GROUP webserver -i net0
+GROUP basic -i net0
+
+OUT DROP -i net0
+IN DROP -i net0
