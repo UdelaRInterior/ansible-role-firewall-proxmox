@@ -1,5 +1,7 @@
 [OPTIONS]
 
+radv: 1				# Router Advertisement
+ndp: 1				# Neighbor Discovery Protocol
 enable: 1
 policy_in: DROP
 
