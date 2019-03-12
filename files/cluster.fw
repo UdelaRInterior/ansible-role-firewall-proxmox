@@ -3,15 +3,48 @@
 policy_in: ACCEPT
 enable: 1
 
+		##### EXAMPLES OF USE PROXMOX FIREWALL
+
+		#TYPE ACTION [OPTIONS]
+		# -i      <INTERFACE>
+		# -source <SOURCE>
+		# -dest   <DEST>
+		# -p      <PROTOCOL>
+		# -dport  <DESTINATION_PORT>
+		# -sport  <SOURCE_PORT>
+
+		#	IN SSH(ACCEPT) -i net0
+		#	IN SSH(ACCEPT) -i net0 # a comment
+		#	IN SSH(ACCEPT) -i net0 -source 192.168.2.192  				# only allow SSH from  192.168.2.192
+		#	IN SSH(ACCEPT) -i net0 -source 10.0.0.1-10.0.0.10 			# accept SSH for ip in range 10.0.0.1 to 10.0.0.10
+		#	IN SSH(ACCEPT) -i net0 -source 10.0.0.1,10.0.0.2,10.0.0.3 	# accept ssh for 10.0.0.1 or 10.0.0.2 or 10.0.0.3
+		#	IN SSH(ACCEPT) -i net0 -source +mynetgroup   				# accept ssh for ipset mynetgroup
+		#	IN SSH(ACCEPT) -i net0 -source myserveralias   				# accept ssh for alias myserveralias
+		#	IN SSH(ACCEPT) -i net0 -source FE80:0000:0000:0000:0202:B3FF:FE1E:8329
+		#	IN ACCEPT -i net0 -p icmpv6
+
+		#	|IN SSH(ACCEPT) -i net0 									# disabled rule
+
+		# GROUP group1 -i net0											# add a security group
+
+
 [group webserver]
-IN HTTP(ACCEPT)
-IN HTTPS(ACCEPT)
+### IN HTTP(ACCEPT)
+### IN HTTPS(ACCEPT)
+IN ACCEPT -p tcp -dport 80
+IN ACCEPT -p tcp -dport 443
 
 [group basic]
 IN SSH(ACCEPT)
 OUT SSH(ACCEPT)
-IN Ping(ACCEPT)
-OUT Ping(ACCEPT)
+	### IN Ping(ACCEPT)
+	### OUT Ping(ACCEPT)
+IN ACCEPT -p icmp
+OUT ACCEPT -p icmp
+IN ACCEPT -p icmpv6
+OUT ACCEPT -p icmpv6
 OUT DNS(ACCEPT)
-OUT HTTP(ACCEPT)	# Necesario para instalación y actualización de paquetes. Needed for install and upgrade packages.
-OUT HTTPS(ACCEPT)	# Necesario para instalación y actualización de paquetes. Needed for install and upgrade packages.
+	### OUT HTTP(ACCEPT)
+	### OUT HTTPS(ACCEPT)
+OUT ACCEPT -p tcp -dport 80		# Necesario para instalación y actualización de paquetes. Needed for install and upgrade packages.
+OUT ACCEPT -p tcp -dport 443	# Necesario para instalación y actualización de paquetes. Needed for install and upgrade packages.
