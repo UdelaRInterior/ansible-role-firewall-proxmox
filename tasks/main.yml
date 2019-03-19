@@ -42,8 +42,8 @@
 ## Copy firewall configuration file for the CLUSTER (Called "Datacenter" in Proxmox web panel)
 - name: Copiar archivo de configuración de firewall para el CLUSTER (Llamado "Datacenter" en panel web de Proxmox)
   copy:
+    src: "{{ firewall_proxmox_files }}/cluster.fw"
     dest: "/etc/pve/firewall/cluster.fw"
-    src: "cluster.fw"
     owner: root
     group: www-data
     mode: "0640"
@@ -72,8 +72,8 @@
 ## Set firewall configuration file for the container if it is defined
 - name: Set archivo de configuración de firewall para el contenedor si está definido
   copy:
+    src: "{{ firewall_proxmox_lxc_file }}"
     dest: "/etc/pve/firewall/{{ VMID.stdout }}.fw"
-    src: "{{ project_lxc_firewall_file }}"
     owner: root
     group: www-data
     mode: "0640"
@@ -85,8 +85,8 @@
 ## Set default firewall file for the container without definition
 - name: Set archivo por defecto de firewall para el contenedor sin definición
   copy:
+    src: "{{ firewall_proxmox_files }}/default.fw"
     dest: "/etc/pve/firewall/{{ VMID.stdout }}.fw"
-    src: "default.fw"
     owner: root
     group: www-data
     mode: "0640"
