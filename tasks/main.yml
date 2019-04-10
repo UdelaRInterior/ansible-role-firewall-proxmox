@@ -38,6 +38,7 @@
     group: www-data
     mode: "0640"
   delegate_to: "{{ api_host }}"
+  when: firewall_proxmox_configure_cluster
 
 ## Copy firewall configuration file for the CLUSTER (Called "Datacenter" in Proxmox web panel)
 - name: Copiar archivo de configuración de firewall para el CLUSTER (Llamado "Datacenter" en panel web de Proxmox)
@@ -50,6 +51,7 @@
   notify:
     - reload pve-firewall
   delegate_to: "{{ api_host }}"
+  when: firewall_proxmox_configure_cluster
 
 
 ## Check if there is a firewall file defined for the container in our project

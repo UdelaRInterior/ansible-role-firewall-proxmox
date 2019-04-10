@@ -46,6 +46,11 @@ Role Variables
 The `defaults` variables define our cluster node (api_host) and the location of firewall configuration files. To be specified by host under `files/firewall_proxmox/host_name/host_fqdn.fw`
 
 ```yaml
+## Indicates if the cluster firewall will also be configured.
+## Keep in mind that modifications to cluster configurations can affect many hosts,
+## especially if groups are defined. Use with care
+firewall_proxmox_configure_cluster: true
+
 ## Our Proxmox Virtual Enviroment node
 api_host: my_node.my_cluster.org
 

@@ -4,7 +4,12 @@
 ## Our Proxmox Virtual Enviroment node
 api_host: my_node.my_cluster.org
 
-## root of all proxmox firewall config files
+## Indicates if the cluster firewall will also be configured.
+## Keep in mind that modifications to cluster configurations can affect many hosts,
+## especially if groups are defined. Use with care
+firewall_proxmox_configure_cluster: true
+
+## Root of all proxmox firewall config files
 firewall_proxmox_files: "firewall_proxmox/etc/pve/firewall"
 
 ## Route to the lxc container correspondent .fw file. Relative to ansible project 'files' folder.
