@@ -4,7 +4,8 @@ enable: 1
 policy_in: ACCEPT
 policy_out: ACCEPT
 
-		##### EXAMPLES OF USE PROXMOX FIREWALL
+
+		##### EXAMPLES OF USE PROXMOX FIREWALL #####
 
 		#TYPE ACTION [OPTIONS]
 		# -i      <INTERFACE>
@@ -28,24 +29,21 @@ policy_out: ACCEPT
 
 		# GROUP group1 -i net0											# add a security group
 
+		##### END OF EXAMPLES #####
+
+
 [group basic]
-IN SSH(ACCEPT)
-OUT SSH(ACCEPT)
-	### IN Ping(ACCEPT)
-	### OUT Ping(ACCEPT)
-IN ACCEPT -p icmp
-OUT ACCEPT -p icmp
-IN ACCEPT -p icmpv6
-OUT ACCEPT -p icmpv6
+IN ACCEPT -p tcp -dport 22 		### IN SSH(ACCEPT)
+OUT ACCEPT -p tcp -dport 22 	### OUT SSH(ACCEPT)
+IN ACCEPT -p icmp 				### IN Ping(ACCEPT)
+OUT ACCEPT -p icmp 				### OUT Ping(ACCEPT)
+IN ACCEPT -p icmpv6 			### IN Ping(ACCEPT)
+OUT ACCEPT -p icmpv6 			### OUT Ping(ACCEPT)
 OUT DNS(ACCEPT)
-	### OUT HTTP(ACCEPT)
-	### OUT HTTPS(ACCEPT)
-OUT ACCEPT -p tcp -dport 80		# Necesario para instalación y actualización de paquetes. Needed for install and upgrade packages.
-OUT ACCEPT -p tcp -dport 443	# Necesario para instalación y actualización de paquetes. Needed for install and upgrade packages.
+OUT ACCEPT -p tcp -dport 80		### OUT HTTP(ACCEPT) # Necesario para instalación y actualización de paquetes. Needed for install and upgrade packages.
+OUT ACCEPT -p tcp -dport 443	### OUT HTTPS(ACCEPT) # Necesario para instalación y actualización de paquetes. Needed for install and upgrade packages.
 
 [group webserver]
-### IN HTTP(ACCEPT)
-### IN HTTPS(ACCEPT)
-IN ACCEPT -p tcp -dport 80
-IN ACCEPT -p tcp -dport 443
+IN ACCEPT -p tcp -dport 80			### IN HTTP(ACCEPT)
+IN ACCEPT -p tcp -dport 443			### IN HTTP(ACCEPT)
 
