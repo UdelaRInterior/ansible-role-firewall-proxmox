@@ -31,10 +31,15 @@ policy_out: ACCEPT
 
 		##### END OF EXAMPLES #####
 
+[ALIASES]
+mynetwork-ipv4 200.200.0.0/16
+mynetwork-ipv6 200:200::/32
 
 [group basic]
-IN ACCEPT -p tcp -dport 22 		### IN SSH(ACCEPT)
-OUT ACCEPT -p tcp -dport 22 	### OUT SSH(ACCEPT)
+IN ACCEPT -p tcp -dport 22 -source mynetwork-ipv4		### IN SSH(ACCEPT)		# !!! DO NOT MIX IPV4 AND IPV6 IN THE SAME RULE
+IN ACCEPT -p tcp -dport 22 -source mynetwork-ipv6		### IN SSH(ACCEPT)		# !!! DO NOT MIX IPV4 AND IPV6 IN THE SAME RULE
+OUT ACCEPT -p tcp -dport 22 -source mynetwork-ipv4		### OUT SSH(ACCEPT)
+OUT ACCEPT -p tcp -dport 22 -source mynetwork-ipv6		### OUT SSH(ACCEPT)
 IN ACCEPT -p icmp 				### IN Ping(ACCEPT)
 OUT ACCEPT -p icmp 				### OUT Ping(ACCEPT)
 IN ACCEPT -p icmpv6 			### IN Ping(ACCEPT)
