@@ -24,7 +24,7 @@
 
 ## Get the VM ID
 - name: Extraer el número de VM
-  shell: pct list | grep -w "{{ proxmox_hostname }}" | cut -f 1 -d ' '
+  shell: "{ pct list & qm list; } | grep -w {{ proxmox_hostname }} | awk '{ print $1 }'"
   delegate_to: "{{ api_host }}"
   register: VMID
 

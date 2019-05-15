@@ -1,9 +1,9 @@
 Ansible Role: firewall_proxmox
 =========
 
-An ansible role to enable and setting on our cluster instance and containers, the firewall service provided by Proxmox.
+An ansible role to enable and setting on our cluster instance, virtual machines and containers, the firewall service provided by Proxmox.
 
-We can define through files, the rules that we want to apply to each container independently. In case of running the playbook in a container for which no rules were defined, a set of default rules that enable HTTP, HTTPS, SSH and ping traffic will be established.
+We can define through files, the rules that we want to apply to each host independently. In case of running the playbook in a host for which no rules were defined, a set of default rules that enable HTTP, HTTPS, SSH and ping traffic will be established.
 
 [Proxmox Firewall Wiki](https://pve.proxmox.com/wiki/Firewall)
 
@@ -11,11 +11,11 @@ We can define through files, the rules that we want to apply to each container i
 Requirements
 ------------
 
-You must act on a Proxmox node or cluster already configured, i.e. you need Proxmox Virtual Environment (pve) node already installed (tested with pve 5), and a Proxmox user with LXC container creation rights.
+You must act on a Proxmox node or cluster already configured, i.e. you need Proxmox Virtual Environment (pve) node already installed (tested with pve 5), and a Proxmox user with LXC/KVM creation rights.
 
 Yo also need an ssh key configured in the local machine, where ansible is ran, i.e. a file `~/.ssh/id_rsa.pub`.
 
-Additionally, note that the firewall must be enabled in the network interface (s) of the containers in which you want it to work.
+Additionally, note that the firewall must be enabled in the network interface (s) of the host in which you want it to work.
 
 
 Installation
@@ -78,7 +78,7 @@ Supposing that:
 * `deploy` our proxmox user in this node
 * `pve_containers_group` an ansible group of the containers to define
 * containers are named `<container>.my_node.my_cluster.org`
-* containers' firewall file can be found in `<playbook_path>/files/firewall_proxmox/<container>.my_node.my_cluster.org.fw`
+* container's firewall file can be found in `<playbook_path>/files/firewall_proxmox/<container>.my_node.my_cluster.org.fw`
 
 Then our variables should be defined as follows:
 ```yaml
@@ -89,7 +89,7 @@ project_lxc_firewall_file: "firewall_proxmox/{{ inventory_hostname }}.fw"
 local_path_to_lxc_firewall_file: "{{ playbook_dir }}/files/{{ project_lxc_firewall_file }}"
 ```
 
-Run the following playbook, enable the firewall for the cluster and configure (based on the .fw files) the desired rules for each container:
+Run the following playbook, enable the firewall for the cluster and configure (based on the .fw files) the desired rules for each host:
 
     - name: Enable and configure Proxmox firewall for the containers declared in pve_containers_group
       hosts: pve_containers_group
