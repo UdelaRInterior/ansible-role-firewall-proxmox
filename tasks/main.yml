@@ -22,11 +22,12 @@
   delegate_to: "{{ api_host }}"
 
 
-## Get the VM ID
-- name: Extraer el número de VM
+## Get the host ID
+- name: Obtener el ID del host
   shell: "{ pct list & qm list; } | grep -w {{ proxmox_hostname }} | awk '{ print $1 }'"
   delegate_to: "{{ api_host }}"
   register: VMID
+  changed_when: false
 
 
 ## Ensure the existence of the firewall configuration file for the CLUSTER
