@@ -1,37 +1,38 @@
 ---
 # tasks file for firewall_proxmox
 
-- name: Extraer el hostname del inventory_hostname que es el fqdn
+## Obtener fqdn del inventory_hostname
+- name: Get fqdn from inventory_hostname
   set_fact:
     proxmox_hostname: "{{ inventory_hostname.split('.')[0] }}"
 
 
-## Verify that python-pip is installed in the proxmox node
-- name: Verificar si python-pip está instalado en el nodo proxmox
+## Verificar si python-pip está instalado en el nodo proxmox
+- name: Verify that python-pip is installed in the proxmox node
   apt:
     name: python-pip
     state: present
   delegate_to: "{{ api_host }}"
 
 
-## Verify if proxmoxer pip module is installed
-- name: Verificar si el módulo proxmoxer de python está instalado
+## Verificar si el módulo proxmoxer de python está instalado
+ - name: Verify if proxmoxer pip module is installed
   pip:
     name: proxmoxer
     state: present
   delegate_to: "{{ api_host }}"
 
 
-## Get the host ID
-- name: Obtener el ID del host
+## Obtener el ID del host
+- name: Get the host ID
   shell: "{ pct list & qm list; } | grep -w {{ proxmox_hostname }} | awk '{ print $1 }'"
   delegate_to: "{{ api_host }}"
   register: VMID
   changed_when: false
 
 
-## Ensure the existence of the firewall configuration file for the CLUSTER
-- name: Asegurar existencia del archivo de configuración de firewall para el CLUSTER
+## Asegurar existencia del archivo de configuración de firewall para el CLUSTER
+- name: Ensure the existence of the firewall configuration file for the CLUSTER
   file:
     path: "/etc/pve/firewall/cluster.fw"
     state: touch
@@ -41,8 +42,8 @@
   delegate_to: "{{ api_host }}"
   when: firewall_proxmox_configure_cluster
 
-## Copy firewall configuration file for the CLUSTER (Called "Datacenter" in Proxmox web panel)
-- name: Copiar archivo de configuración de firewall para el CLUSTER (Llamado "Datacenter" en panel web de Proxmox)
+## Copiar archivo de configuración de firewall para el CLUSTER (Llamado "Datacenter" en panel web de Proxmox)
+- name: Copy firewall configuration file for the CLUSTER (Called "Datacenter" in Proxmox web panel)
   copy:
     src: "{{ firewall_proxmox_files }}/cluster.fw"
     dest: "/etc/pve/firewall/cluster.fw"
@@ -55,15 +56,15 @@
   when: firewall_proxmox_configure_cluster
 
 
-## Check if there is a firewall file defined for the container in our project
-- name: Comprobar si existe un archivo de firewall definido para el contenedor en nuestro proyecto
+## Comprobar si existe un archivo de firewall definido para el contenedor en nuestro proyecto
+- name: Check if there is a firewall file defined for the container in our project
   become: no
   local_action: stat path={{ local_path_to_lxc_firewall_file }}
   register: host_firewall_file
 
 
-## Ensure existence of the firewall configuration file for the container
-- name: Asegurar existencia del archivo de configuración de firewall para el contenedor
+## Asegurar existencia del archivo de configuración de firewall para el contenedor
+- name: Ensure existence of the firewall configuration file for the container
   file:
     path: "/etc/pve/firewall/{{ VMID.stdout }}.fw"
     state: touch
@@ -72,8 +73,8 @@
     mode: "0640"
   delegate_to: "{{ api_host }}"
 
-## Set firewall configuration file for the container if it is defined
-- name: Set archivo de configuración de firewall para el contenedor si está definido
+## Set archivo de configuración de firewall para el contenedor si está definido
+- name: Set firewall configuration file for the container if it is defined
   copy:
     src: "{{ firewall_proxmox_lxc_file }}"
     dest: "/etc/pve/firewall/{{ VMID.stdout }}.fw"
@@ -85,8 +86,8 @@
   delegate_to: "{{ api_host }}"
   when: host_firewall_file.stat.exists
 
-## Set default firewall file for the container without definition
-- name: Set archivo por defecto de firewall para el contenedor sin definición
+## Set archivo por defecto de firewall para el contenedor sin definición
+- name: Set default firewall file for the container without definition
   copy:
     src: "{{ firewall_proxmox_files }}/default.fw"
     dest: "/etc/pve/firewall/{{ VMID.stdout }}.fw"
