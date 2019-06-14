@@ -16,7 +16,7 @@
 
 
 ## Verificar si el módulo proxmoxer de python está instalado
- - name: Verify if proxmoxer pip module is installed
+- name: Verify if proxmoxer pip module is installed
   pip:
     name: proxmoxer
     state: present
