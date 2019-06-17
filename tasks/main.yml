@@ -25,7 +25,11 @@
 
 ## Obtener el ID del host
 - name: Get the host ID
-  shell: "{ pct list & qm list; } | grep -w {{ proxmox_hostname }} | awk '{ print $1 }'"
+  shell: |
+    set -o pipefail
+    { pct list & qm list; } | grep -w {{ proxmox_hostname }} | awk '{ print $1 }'
+  args:
+    executable: /bin/bash
   delegate_to: "{{ api_host }}"
   register: VMID
   changed_when: false
@@ -58,8 +62,10 @@
 
 ## Comprobar si existe un archivo de firewall definido para el contenedor en nuestro proyecto
 - name: Check if there is a firewall file defined for the container in our project
+  stat:
+    path: "{{ local_path_to_lxc_firewall_file }}"
   become: no
-  local_action: stat path={{ local_path_to_lxc_firewall_file }}
+  delegate_to: localhost
   register: host_firewall_file
 
 

@@ -17,4 +17,3 @@ firewall_proxmox_lxc_file: "{{ firewall_proxmox_files }}/{{ inventory_hostname.s
 
 ## Route to the lxc container correspondent .fw file. Absolute to the file on our local machine that runs the playbook.
 local_path_to_lxc_firewall_file: "{{ playbook_dir }}/files/{{ firewall_proxmox_lxc_file }}"
-
