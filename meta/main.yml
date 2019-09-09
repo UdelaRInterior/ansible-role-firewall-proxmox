@@ -1,4 +1,5 @@
 galaxy_info:
+  role_name: firewall_proxmox
   author: Santiago Martínez (@santiagomr)
   description: Ansible role to enable and configure firewall on Proxmox cluster
   company: Red Unidades Informáticas UdelaR Interior (@UdelaRInterior)
