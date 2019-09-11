@@ -1,7 +1,7 @@
 Ansible Role: firewall_proxmox
 =========
 
-An ansible role to enable and setting on our cluster instance, virtual machines and containers, the firewall service provided by Proxmox.
+An Ansible role to enable and setting on our cluster instance, virtual machines and containers, the firewall service provided by Proxmox.
 
 We can define through files, the rules that we want to apply to each host independently. In case of running the playbook in a host for which no rules were defined, a set of default rules that enable HTTP, HTTPS, SSH and ping traffic will be established.
 
@@ -11,7 +11,7 @@ We can define through files, the rules that we want to apply to each host indepe
 Requirements
 ------------
 
-You must act on a Proxmox node or cluster already configured, i.e. you need Proxmox Virtual Environment (pve) node already installed (tested with pve 5), and a Proxmox user with LXC/KVM creation rights.
+You must act on a Proxmox node or cluster already configured, i.e. you need Proxmox Virtual Environment (PVE) node already installed (tested with PVE 5), and a Proxmox user with LXC/KVM creation rights.
 
 Yo also need an ssh key configured in the local machine, where ansible is ran, i.e. a file `~/.ssh/id_rsa.pub`.
 
@@ -24,10 +24,12 @@ Installation
 To be able to update later and eventually to modify it, prefer using `requirements.yml` with the git source:
 
 ```yaml
+  ### From GitHub
 - name: firewall_proxmox
   src: https://github.com/UdelaRInterior/ansible-role-firewall-proxmox.git
   scm: git
-  ```
+```
+
 And then download it with `ansible-galaxy`:
 
 ```shell
@@ -64,19 +66,19 @@ local_path_to_lxc_firewall_file: "{{ playbook_dir }}/files/{{ project_lxc_firewa
 Dependencies
 ------------
 
-We need ansible version >= 2.5 (?) to have the appropriate API of proxmox modules. (Tested on Ansible 2.7)
+We need ansible version >= 2.5 (?) to have the appropriate API of Proxmox modules. (Tested on Ansible 2.7)
 
-Proxmox pve 5 installed in a the proxmox node.
+Proxmox PVE 5 installed in a cluster node.
 
 
 Example Playbook
 ----------------
 
 Supposing that:
-* `my_node.my_cluster.org` is our pve node NS (api on port 8006)
-* `my_node` it's pve node name
-* `deploy` our proxmox user in this node
-* `pve_containers_group` an ansible group of the containers to define
+* `my_node.my_cluster.org` is our PVE node NS (api on port 8006)
+* `my_node` it's PVE node name
+* `deploy` our Proxmox user in this node
+* `pve_containers_group` an Ansible group of the containers to define
 * containers are named `<container>.my_node.my_cluster.org`
 * container's firewall file can be found in `<playbook_path>/files/firewall_proxmox/<container>.my_node.my_cluster.org.fw`
 
@@ -104,12 +106,11 @@ Run the following playbook, enable the firewall for the cluster and configure (b
 License
 -------
 
-(c) Universidad de la República (UdelaR), Red de Unidades Informáticas de la UdelaR en el Interior.
-licenced under GPL-v3
+(c) Universidad de la República (UdelaR), Red de Unidades Informáticas de la UdelaR en el Interior. Licenced under GPL-v3
 
 Author Information
 ------------------
 
-[santiagomr](https://github.com/santiagomr)
-https://github.com/UdelaRInterior
+[@santiagomr](https://github.com/santiagomr)
+[@UdelaRInterior](https://github.com/UdelaRInterior)
 https://proyectos.interior.edu.uy/
