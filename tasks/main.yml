@@ -61,7 +61,7 @@
 
 
 ## Comprobar si existe un archivo de firewall definido para el contenedor en nuestro proyecto
-- name: Check if there is a firewall file defined for the container in our project
+- name: Check if there is a firewall file defined for the container/vm in our project
   stat:
     path: "{{ local_path_to_lxc_firewall_file }}"
   become: no
@@ -70,7 +70,7 @@
 
 
 ## Asegurar existencia del archivo de configuración de firewall para el contenedor
-- name: Ensure existence of the firewall configuration file for the container
+- name: Ensure existence of the firewall configuration file for the container/vm
   file:
     path: "/etc/pve/firewall/{{ VMID.stdout }}.fw"
     state: touch
@@ -80,7 +80,7 @@
   delegate_to: "{{ api_host }}"
 
 ## Set archivo de configuración de firewall para el contenedor si está definido
-- name: Set firewall configuration file for the container if it is defined
+- name: Set firewall configuration file for the container/vm if it is defined
   copy:
     src: "{{ firewall_proxmox_lxc_file }}"
     dest: "/etc/pve/firewall/{{ VMID.stdout }}.fw"
@@ -93,7 +93,7 @@
   when: host_firewall_file.stat.exists
 
 ## Set archivo por defecto de firewall para el contenedor sin definición
-- name: Set default firewall file for the container without definition
+- name: Set default firewall file for the container/vm without definition
   copy:
     src: "{{ firewall_proxmox_files }}/default.fw"
     dest: "/etc/pve/firewall/{{ VMID.stdout }}.fw"
