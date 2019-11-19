@@ -34,6 +34,15 @@
   register: VMID
   changed_when: false
 
+## Asegurar existencia del directorio de configuración de firewall para el CLUSTER
+- name: Ensure the existence of the firewall configuration directory for the CLUSTER
+  file:
+    path: "/etc/pve/firewall"
+    state: directory
+    owner: root
+    group: www-data
+    mode: "0640"
+  delegate_to: "{{ api_host }}"
 
 ## Asegurar existencia del archivo de configuración de firewall para el CLUSTER
 - name: Ensure the existence of the firewall configuration file for the CLUSTER
