@@ -45,7 +45,7 @@ $ git clone https://github.com/UdelaRInterior/ansible-role-firewall-proxmox.git 
 Role Variables
 --------------
 
-The `defaults` variables define our cluster node (api_host) and the location of firewall configuration files. To be specified by host under `files/firewall_proxmox/host_name/host_fqdn.fw`
+The `defaults` variables define our cluster node (pve_api_host) and the location of firewall configuration files. To be specified by host under `files/firewall_proxmox/host_name/host_fqdn.fw`
 
 ```yaml
 ## Indicates if the cluster firewall will also be configured.
@@ -54,7 +54,7 @@ The `defaults` variables define our cluster node (api_host) and the location of 
 firewall_proxmox_configure_cluster: true
 
 ## Our Proxmox Virtual Enviroment node
-api_host: my_node.my_cluster.org
+pve_api_host: my_node.my_cluster.org
 
 ## Route to the lxc container correspondent .fw file. Relative to ansible project 'files' folder.
 project_lxc_firewall_file: "firewall_proxmox/{{ inventory_hostname }}/{{ inventory_hostname.split('.')[0] }}.fw"
@@ -84,7 +84,7 @@ Supposing that:
 
 Then our variables should be defined as follows:
 ```yaml
-api_host: my_node.my_cluster.org
+pve_api_host: my_node.my_cluster.org
 
 project_lxc_firewall_file: "firewall_proxmox/{{ inventory_hostname }}.fw"
 

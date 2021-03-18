@@ -2,7 +2,7 @@
 # defaults file for pve-firewall
 
 ## Our Proxmox Virtual Enviroment node
-api_host: my_node.my_cluster.org
+pve_api_host: "{{ api_host if api_host is defined else 'my_node.my_cluster.org' }}"
 
 ## Indicates if the cluster firewall will also be configured.
 ## Keep in mind that modifications to cluster configurations can affect many hosts,

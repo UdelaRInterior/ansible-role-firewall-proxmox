@@ -12,7 +12,7 @@
   apt:
     name: python-pip
     state: present
-  delegate_to: "{{ api_host }}"
+  delegate_to: "{{ pve_api_host }}"
 
 
 ## Verificar si el módulo proxmoxer de python está instalado
@@ -20,7 +20,7 @@
   pip:
     name: proxmoxer
     state: present
-  delegate_to: "{{ api_host }}"
+  delegate_to: "{{ pve_api_host }}"
 
 
 ## Obtener el ID del host
@@ -30,7 +30,7 @@
     { pct list & qm list; } | grep -w {{ proxmox_hostname }} | awk '{ print $1 }'
   args:
     executable: /bin/bash
-  delegate_to: "{{ api_host }}"
+  delegate_to: "{{ pve_api_host }}"
   register: VMID
   changed_when: false
 
@@ -42,7 +42,7 @@
     owner: root
     group: www-data
     mode: "0640"
-  delegate_to: "{{ api_host }}"
+  delegate_to: "{{ pve_api_host }}"
 
 ## Asegurar existencia del archivo de configuración de firewall para el CLUSTER
 - name: Ensure the existence of the firewall configuration file for the CLUSTER
@@ -52,7 +52,7 @@
     owner: root
     group: www-data
     mode: "0640"
-  delegate_to: "{{ api_host }}"
+  delegate_to: "{{ pve_api_host }}"
   when: firewall_proxmox_configure_cluster | bool
 
 ## Copiar archivo de configuración de firewall para el CLUSTER (Llamado "Datacenter" en panel web de Proxmox)
@@ -65,7 +65,7 @@
     mode: "0640"
   notify:
     - reload pve-firewall
-  delegate_to: "{{ api_host }}"
+  delegate_to: "{{ pve_api_host }}"
   when: firewall_proxmox_configure_cluster | bool
 
 
@@ -86,7 +86,7 @@
     owner: root
     group: www-data
     mode: "0640"
-  delegate_to: "{{ api_host }}"
+  delegate_to: "{{ pve_api_host }}"
 
 ## Set archivo de configuración de firewall para el contenedor si está definido
 - name: Set firewall configuration file for the container/vm if it is defined
@@ -98,7 +98,7 @@
     mode: "0640"
   notify:
     - reload pve-firewall
-  delegate_to: "{{ api_host }}"
+  delegate_to: "{{ pve_api_host }}"
   when: host_firewall_file.stat.exists
 
 ## Set archivo por defecto de firewall para el contenedor sin definición
@@ -111,5 +111,5 @@
     mode: "0640"
   notify:
     - reload pve-firewall
-  delegate_to: "{{ api_host }}"
+  delegate_to: "{{ pve_api_host }}"
   when: (not host_firewall_file.stat.exists)
