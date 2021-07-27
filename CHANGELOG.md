@@ -1,10 +1,19 @@
 # Change Log of [`udelarinterior.firewall_proxmox` role](https://github.com/UdelaRInterior/ansible-role-firewall-proxmox)
 
+## [v3.0.0](https://github.com/UdelaRInterior/ansible-role-firewall-proxmox/tree/v3.0.0)
+
+Updated to Ansible v2.10 (use of collections) and several improvements:
+* The variable `pve_hostname` is now available to use custom hostnames and provide more versatility than the old form inferred from inventory.
+* Now, using `modification_time` and `access_time` parameters in the `ansible.builtin.file` module, the complete idempotency of the role is duly represented in the tasks results.
+* Proxmoxer is not required for the tasks of this role. The tasks that ensured that this false dependency was installed were removed.
+* Full implementation of `pve_*` namespace usage, consistent with other Proxmox roles.
+* This role configures the Proxmox firewall for both virtual machines and containers. However, many comments, task and variable names referred only to LXC containers. These details have been corrected to reflect the true scope of the role and to avoid confusion.
+* Numerous variables renamed to be mnemonic.
+
 ## [v2.0.0](https://github.com/UdelaRInterior/ansible-role-firewall-proxmox/tree/v2.0.0)
 
-* adopt `pve_*` namespace for `api_host`variables, shared with `udelarinterior.proxmox_create_kvm` and `udelarinterior.proxmox_create_lxc`
-
+* Adopt `pve_*` namespace for `api_host` variables, shared with `udelarinterior.proxmox_create_kvm` and `udelarinterior.proxmox_create_lxc`.
 
 ## [v1.0.0](https://github.com/UdelaRInterior/ansible-role-firewall-proxmox/tree/v1.0.0)
 
-* First stable version. Configures proxmox firewall for containers and VMs
+* First stable version. Configures proxmox firewall for containers and VMs.

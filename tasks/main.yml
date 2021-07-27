@@ -1,33 +1,11 @@
 ---
 # tasks file for firewall_proxmox
 
-## Obtener fqdn del inventory_hostname
-- name: Get fqdn from inventory_hostname
-  set_fact:
-    proxmox_hostname: "{{ inventory_hostname.split('.')[0] }}"
-
-
-## Verificar si python-pip está instalado en el nodo proxmox
-- name: Verify that python-pip is installed in the proxmox node
-  apt:
-    name: python-pip
-    state: present
-  delegate_to: "{{ pve_api_host }}"
-
-
-## Verificar si el módulo proxmoxer de python está instalado
-- name: Verify if proxmoxer pip module is installed
-  pip:
-    name: proxmoxer
-    state: present
-  delegate_to: "{{ pve_api_host }}"
-
-
 ## Obtener el ID del host
 - name: Get the host ID
-  shell: |
+  ansible.builtin.shell: |
     set -o pipefail
-    { pct list & qm list; } | grep -w {{ proxmox_hostname }} | awk '{ print $1 }'
+    { pct list & qm list; } | grep -w {{ pve_hostname }} | awk '{ print $1 }'
   args:
     executable: /bin/bash
   delegate_to: "{{ pve_api_host }}"
@@ -36,7 +14,7 @@
 
 ## Asegurar existencia del directorio de configuración de firewall para el CLUSTER
 - name: Ensure the existence of the firewall configuration directory for the CLUSTER
-  file:
+  ansible.builtin.file:
     path: "/etc/pve/firewall"
     state: directory
     owner: root
@@ -46,19 +24,21 @@
 
 ## Asegurar existencia del archivo de configuración de firewall para el CLUSTER
 - name: Ensure the existence of the firewall configuration file for the CLUSTER
-  file:
+  ansible.builtin.file:
     path: "/etc/pve/firewall/cluster.fw"
     state: touch
     owner: root
     group: www-data
     mode: "0640"
+    modification_time: preserve
+    access_time: preserve
   delegate_to: "{{ pve_api_host }}"
-  when: firewall_proxmox_configure_cluster | bool
+  when: pve_firewall_configure_cluster | bool
 
 ## Copiar archivo de configuración de firewall para el CLUSTER (Llamado "Datacenter" en panel web de Proxmox)
 - name: Copy firewall configuration file for the CLUSTER (Called "Datacenter" in Proxmox web panel)
-  copy:
-    src: "{{ firewall_proxmox_files }}/cluster.fw"
+  ansible.builtin.copy:
+    src: "{{ pve_firewall_configuration_files }}/cluster.fw"
     dest: "/etc/pve/firewall/cluster.fw"
     owner: root
     group: www-data
@@ -66,32 +46,32 @@
   notify:
     - reload pve-firewall
   delegate_to: "{{ pve_api_host }}"
-  when: firewall_proxmox_configure_cluster | bool
+  when: pve_firewall_configure_cluster | bool
 
-
-## Comprobar si existe un archivo de firewall definido para el contenedor en nuestro proyecto
-- name: Check if there is a firewall file defined for the container/vm in our project
-  stat:
-    path: "{{ local_path_to_lxc_firewall_file }}"
+## Comprobar si existe un archivo de firewall definido para el contenedor/VM en nuestro proyecto
+- name: Check if there is a firewall file defined for the container/VM in our project
+  ansible.builtin.stat:
+    path: "{{ pve_firewall_path_to_host_configuration_file }}"
   become: no
   delegate_to: localhost
-  register: host_firewall_file
+  register: host_firewall_configuration_file
 
-
-## Asegurar existencia del archivo de configuración de firewall para el contenedor
-- name: Ensure existence of the firewall configuration file for the container/vm
-  file:
+## Asegurar existencia del archivo de configuración de firewall para el contenedor/VM
+- name: Ensure existence of the firewall configuration file for the container/VM
+  ansible.builtin.file:
     path: "/etc/pve/firewall/{{ VMID.stdout }}.fw"
     state: touch
     owner: root
     group: www-data
     mode: "0640"
+    modification_time: preserve
+    access_time: preserve
   delegate_to: "{{ pve_api_host }}"
 
-## Set archivo de configuración de firewall para el contenedor si está definido
-- name: Set firewall configuration file for the container/vm if it is defined
-  copy:
-    src: "{{ firewall_proxmox_lxc_file }}"
+## Copiar archivo de configuración de firewall para el contenedor/VM si está definido
+- name: Copy firewall configuration file for the container/VM if it is defined
+  ansible.builtin.copy:
+    src: "{{ pve_firewall_host_configuration_file }}"
     dest: "/etc/pve/firewall/{{ VMID.stdout }}.fw"
     owner: root
     group: www-data
@@ -99,12 +79,12 @@
   notify:
     - reload pve-firewall
   delegate_to: "{{ pve_api_host }}"
-  when: host_firewall_file.stat.exists
+  when: host_firewall_configuration_file.stat.exists
 
-## Set archivo por defecto de firewall para el contenedor sin definición
-- name: Set default firewall file for the container/vm without definition
-  copy:
-    src: "{{ firewall_proxmox_files }}/default.fw"
+## Copiar archivo por defecto de firewall para el contenedor/VM sin definición
+- name: Copy default firewall file for the container/VM without definition
+  ansible.builtin.copy:
+    src: "{{ pve_firewall_configuration_files }}/default.fw"
     dest: "/etc/pve/firewall/{{ VMID.stdout }}.fw"
     owner: root
     group: www-data
@@ -112,4 +92,6 @@
   notify:
     - reload pve-firewall
   delegate_to: "{{ pve_api_host }}"
-  when: (not host_firewall_file.stat.exists)
+  when: (not host_firewall_configuration_file.stat.exists)
+
+...

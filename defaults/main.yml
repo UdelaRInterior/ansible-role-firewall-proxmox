@@ -2,18 +2,24 @@
 # defaults file for pve-firewall
 
 ## Our Proxmox Virtual Enviroment node
-pve_api_host: "{{ api_host if api_host is defined else 'my_node.my_cluster.org' }}"
+pve_api_host: mynode.mycluster.org
+
+# By default, we suppose that `inventory_hostname` is the FQDN or the hostname of the host to create, so we set the variable to the hostname.
+# You can arbitrarly define this hostname
+pve_hostname: "{{ inventory_hostname.split('.')[0] }}"
 
 ## Indicates if the cluster firewall will also be configured.
-## Keep in mind that modifications to cluster configurations can affect many hosts,
-## especially if groups are defined. Use with care
-firewall_proxmox_configure_cluster: true
+## Keep in mind that modifications to cluster configurations can
+## affect many hosts, especially if groups are defined. Use with care
+pve_firewall_configure_cluster: true
 
-## Root of all proxmox firewall config files
-firewall_proxmox_files: "firewall_proxmox/etc/pve/firewall"
+## Path to go to find firewall files
+pve_firewall_configuration_files: "firewall_proxmox/etc/pve/firewall"
 
-## Route to the lxc container correspondent .fw file. Relative to ansible project 'files' folder.
-firewall_proxmox_lxc_file: "{{ firewall_proxmox_files }}/{{ inventory_hostname.split('.')[0] }}.fw"
+## Path to the host correspondent .fw file. Relative to Ansible project 'files' folder.
+pve_firewall_host_configuration_file: "{{ pve_firewall_configuration_files }}/{{ pve_hostname }}.fw"
 
-## Route to the lxc container correspondent .fw file. Absolute to the file on our local machine that runs the playbook.
-local_path_to_lxc_firewall_file: "{{ playbook_dir }}/files/{{ firewall_proxmox_lxc_file }}"
+## Path to the host correspondent .fw file. Absolute to the file on our local machine that runs the playbook.
+pve_firewall_path_to_host_configuration_file: "{{ playbook_dir }}/files/{{ pve_firewall_host_configuration_file }}"
+
+...

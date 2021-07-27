@@ -2,7 +2,9 @@
 # handlers file for pve-firewall
 
 - name: reload pve-firewall
-  service:
+  ansible.builtin.service:
     name: pve-firewall
     state: reloaded
   delegate_to: "{{ pve_api_host }}"
+
+...
