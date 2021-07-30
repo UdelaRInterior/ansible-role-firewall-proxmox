@@ -4,6 +4,7 @@
 
 Updated to Ansible v2.10 (use of collections) and several improvements:
 * The variable `pve_hostname` is now available to use custom hostnames and provide more versatility than the old form inferred from inventory.
+* To prevent unwanted impacts and security issues on a cluster in production, the cluster configuration is no longer configured by default.
 * Now, using `modification_time` and `access_time` parameters in the `ansible.builtin.file` module, the complete idempotency of the role is duly represented in the tasks results.
 * Proxmoxer is not required for the tasks of this role. The tasks that ensured that this false dependency was installed were removed.
 * Full implementation of `pve_*` namespace usage, consistent with other Proxmox roles.

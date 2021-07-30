@@ -11,7 +11,7 @@ pve_hostname: "{{ inventory_hostname.split('.')[0] }}"
 ## Indicates if the cluster firewall will also be configured.
 ## Keep in mind that modifications to cluster configurations can
 ## affect many hosts, especially if groups are defined. Use with care
-pve_firewall_configure_cluster: true
+pve_firewall_configure_cluster: false
 
 ## Path to go to find firewall files
 pve_firewall_configuration_files: "firewall_proxmox/etc/pve/firewall"
