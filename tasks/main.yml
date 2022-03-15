@@ -21,6 +21,7 @@
     group: www-data
     mode: "0640"
   delegate_to: "{{ pve_api_host }}"
+  run_once: true
 
 ## Asegurar existencia del archivo de configuración de firewall para el CLUSTER
 - name: Ensure the existence of the firewall configuration file for the CLUSTER
@@ -34,6 +35,7 @@
     access_time: preserve
   delegate_to: "{{ pve_api_host }}"
   when: pve_firewall_configure_cluster | bool
+  run_once: true
 
 ## Copiar archivo de configuración de firewall para el CLUSTER (Llamado "Datacenter" en panel web de Proxmox)
 - name: Copy firewall configuration file for the CLUSTER (Called "Datacenter" in Proxmox web panel)
@@ -47,6 +49,7 @@
     - reload pve-firewall
   delegate_to: "{{ pve_api_host }}"
   when: pve_firewall_configure_cluster | bool
+  run_once: true
 
 ## Comprobar si existe un archivo de firewall definido para el contenedor/VM en nuestro proyecto
 - name: Check if there is a firewall file defined for the container/VM in our project
