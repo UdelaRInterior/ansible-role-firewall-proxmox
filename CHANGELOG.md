@@ -1,5 +1,9 @@
 # Change Log of [`udelarinterior.firewall_proxmox` role](https://github.com/UdelaRInterior/ansible-role-firewall-proxmox)
 
+## [v3.0.1](https://github.com/UdelaRInterior/ansible-role-firewall-proxmox/tree/v3.0.1)
+
+Thanks to [@exodious](https://github.com/exodious): fixed bug when running on multiple hosts with `pve_firewall_configure_cluster` set to true, FileNotFoundError was generated intermittently during cluster.fw copy task. ([#3](https://github.com/UdelaRInterior/ansible-role-firewall-proxmox/issues/3)) ([#4](https://github.com/UdelaRInterior/ansible-role-firewall-proxmox/pull/4))
+
 ## [v3.0.0](https://github.com/UdelaRInterior/ansible-role-firewall-proxmox/tree/v3.0.0)
 
 Updated to Ansible v2.10 (use of collections) and several improvements:
