@@ -1,5 +1,9 @@
 # Change Log of [`udelarinterior.firewall_proxmox` role](https://github.com/UdelaRInterior/ansible-role-firewall-proxmox)
 
+## Collection `cielito.proxmox` [v1.0.0](https://git.interior.edu.uy/cielito/proxmox/tree/v1.0.0)
+
+The role is migrated to the [`cielito.proxmox` collection](https://git.interior.edu.uy/cielito/proxmox/), this repository is deprecated, available read only for archives purposes. 
+
 ## [v3.0.1](https://github.com/UdelaRInterior/ansible-role-firewall-proxmox/tree/v3.0.1)
 
 Thanks to [@exodious](https://github.com/exodious): fixed bug when running on multiple hosts with `pve_firewall_configure_cluster` set to true, FileNotFoundError was generated intermittently during cluster.fw copy task. ([#3](https://github.com/UdelaRInterior/ansible-role-firewall-proxmox/issues/3)) ([#4](https://github.com/UdelaRInterior/ansible-role-firewall-proxmox/pull/4))
